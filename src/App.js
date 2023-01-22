@@ -1,9 +1,14 @@
-
+import { Route, Routes } from "react-router-dom";
+import Home from './userPost'
+import CreatePost from "./userPost/CreatePost";
 
 function App() {
   return (
     <div className="text-xl">
-      here
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path='/createPost' element={<CreatePost />} />
+      </Routes>
     </div>
   );
 }
