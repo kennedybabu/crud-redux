@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Home from './userPost'
+import Home from './userPost/Home'
 import CreatePost from "./userPost/CreatePost";
 
 function App() {
