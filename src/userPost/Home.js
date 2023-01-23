@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPost } from '../redux/features/postSlice'
+import { deletePost, getPost } from '../redux/features/postSlice'
 import LoadingCard from './LoadingCard'
 
 const Home = () => {
@@ -33,13 +33,17 @@ const Home = () => {
         <Link className='text-sm px-3 py-2 bg-blue-400' to={'/createpost'}>create user post</Link>
       </div>
 
-      {loading ? <LoadingCard /> : (
+      {loading ? (<LoadingCard /> ) : (
         <>
           <div className='w-full flex flex-col items-center'>
               <p>{post[0]?.title}</p>
               <p>{post[0]?.body}</p>
               <small>{post[0]?.id}</small>
-          </div>
+            { post[0] ? <div className='w-full flex items-center justify-center my-4 gap-4'>
+                <button className='text-sm px-3 py-2 bg-red-400' onClick={() => dispatch(deletePost({id: post[0].id}))}>Delete</button>
+                <button className='text-sm px-3 py-2 bg-yellow-200'>Edit</button>
+              </div> : null }
+          </div>         
         </>
       )}
     </div>
