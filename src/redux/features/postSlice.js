@@ -31,12 +31,36 @@ export const createPost = createAsyncThunk('post/createPost', async({values}) =>
     )
 })
 
+
+export const updatePost = createAsyncThunk('post/updatePost', async({id, body, title }) => {
+    return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+        method: "PUT",
+        headers :{
+            Accept: 'application/json',
+            'Content-type':'application/json'
+        },
+        body: JSON.stringify({
+            title,
+            body
+        })
+    }).then((res) => res.json()
+    )
+})
+
 const postSlice = createSlice({
     name: 'post',
     initialState: {
         post:[],
         loading: false,
-        error: null
+        error: null,
+        body:'',
+        edit:false
+    },
+    reducers: {
+        setEdit: (state, action) => {
+            state.edit = action.payload.edit
+            state.body = action.payload.body
+        }
     },
     extraReducers: {
         [getPost.pending]: (state, action) =>{
@@ -72,10 +96,23 @@ const postSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        [updatePost.pending]: (state, action) =>{
+            state.loading = true;
+        },
+        [updatePost.fulfilled]: (state, action) =>{
+            state.loading = false;
+            state.post = [action.payload];
+        },
+        [updatePost.rejected]: (state, action) =>{
+            state.loading = false;
+            state.error = action.payload;
+        },
 
     }
 
 })
 
+
+export const {setEdit} = postSlice.actions
 
 export default postSlice.reducer
