@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { createPost } from '../redux/features/postSlice'
+import LoadingCard from "./LoadingCard"
+
 
 const CreatePost = () => {
   const dispatch = useDispatch()
@@ -10,9 +13,27 @@ const CreatePost = () => {
   })
   const [showPost, setShowPost] = useState(false)
   const {title, body} = values
+  const {post, loading} =useSelector((state) => ({...state.app}))
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    dispatch(createPost({values}))
+    setValues({title:'', body:''})
+    setShowPost(true)
+  }
 
+  const showBlog =() => {
+    return (
+      <>
+        {loading ? (<LoadingCard />) :(
+          <div>
+              <p>{post[0]?.title}</p>
+              <small>{post[0]?.body}</small>
+          </div>
+        )}
+      </>
+
+    )
   }
 
   return (
@@ -28,6 +49,10 @@ const CreatePost = () => {
           <button onClick={handleSubmit} className='text-sm px-3 py-2 bg-blue-300'>submit</button>
         </div>
       </form>
+      <div>
+          {showPost && <div>{showBlog()}</div>}
+      </div>
+       
     </div>
   )
 }
